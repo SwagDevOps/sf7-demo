@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
 use function Symfony\Component\String\u;
 
-class AbstractController extends Controller
+abstract class AbstractController extends Controller
 {
     /**
      * @inheritDoc

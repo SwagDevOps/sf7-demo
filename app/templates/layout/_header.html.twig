@@ -1,0 +1,18 @@
+<header>
+    <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+        <h1 class="fs-4">
+            <a href="{{ path('home') }}" class="d-flex align-items-center text-dark text-decoration-none">
+                {% block content_title %}My Application{% endblock %}
+            </a>
+        </h1>
+
+        <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+            {% for label, path in navbar_items %}
+                <a class="py-2 text-dark text-decoration-none {{ (loop.last) ? '' : 'me3' }}"
+                   href="{{ path(path) }}">
+                    {{ label|trans }}
+                </a>
+            {% endfor %}
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,25 @@
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-12 col-md">
+            <p class="d-block mb-3 text-muted">
+                <small>
+                    <strong>SwagDevOps</strong>
+                    <br/>
+                    &copy; 2017–2021
+                </small>
+            </p>
+        </div>
+        <div class="col-6 col-md">
+            <h5>Features</h5>
+            {{ include('layout/_footer/_links.html.twig', {links: footer_features}) }}
+        </div>
+        <div class="col-6 col-md">
+            <h5>Resources</h5>
+            {{ include('layout/_footer/_links.html.twig', {links: footer_resources}) }}
+        </div>
+        <div class="col-6 col-md">
+            <h5>About</h5>
+            {{ include('layout/_footer/_links.html.twig', {links: footer_about}) }}
+        </div>
+    </div>
+</footer>

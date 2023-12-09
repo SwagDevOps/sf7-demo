@@ -1,0 +1,10 @@
+<ul class="list-unstyled text-small">
+    {% for label, path in links %}
+        <li class="mb-1">
+            <a class="link-secondary text-decoration-none"
+               href="{{ (path == '#' or path == null) ? '#' : path(path) }}">
+                {{ label|trans }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

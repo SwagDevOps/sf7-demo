@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+set -eu
+
+TAG='current-alpine3.18'
+
+exec docker run -i$(test  -t 1 && echo 't') --rm \
+  -v "$(pwd)/app":/usr/src/app \
+  -w /usr/src/app \
+  -e NPM_CONFIG_UPDATE_NOTIFIER=false \
+  node:${TAG} \
+  npm "$@"

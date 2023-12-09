@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Provide a simple planner app.
  */
-class PlannerController extends AbstractController
+class EventsController extends AbstractController
 {
     #[Route('/', name: 'home')]
     public function index(): Response

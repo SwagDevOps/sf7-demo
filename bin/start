@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+set -eux
+
+docker-compose up -d
+bin/composer install
+bin/npm install
+bin/npm run build

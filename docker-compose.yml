@@ -10,17 +10,30 @@ services:
     volumes:
       - .:/var/www/
     working_dir: /var/www
+    environment:
+      DATABASE_URL: "mysql://${MYSQL_USER:-john_doe}:${MYSQL_PASSWORD:-e3f11506-8bbf-4511-938a-10cc2d42a3ca}@mysql:3306/${MYSQL_DATABASE:-planner}?serverVersion=10.6.16-MariaDB"
   mysql:
     networks:
       - test_network
     build: './docker/mysql'
     environment:
-      MYSQL_USER: 'john_doe'
-      MYSQL_PASSWORD: 'e3f11506-8bbf-4511-938a-10cc2d42a3ca'
-      MYSQL_ROOT_PASSWORD: 'f8b76cbf-d314-4907-9350-1a880444101d'
-      MYSQL_DATABASE: 'planner'
+      MYSQL_USER: '${MYSQL_USER:-john_doe}'
+      MYSQL_PASSWORD: '${MYSQL_PASSWORD:-e3f11506-8bbf-4511-938a-10cc2d42a3ca}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD:-f8b76cbf-d314-4907-9350-1a880444101d}'
+      MYSQL_DATABASE: '${MYSQL_DATABASE:-planner}'
     volumes:
       - mysql_data:/var/lib/mysql
+  adminer:
+    networks:
+      - test_network
+    image: adminer:4.8.1-standalone
+    depends_on:
+        - mysql
+    ports:
+      - '${ADMINER_PORT:-8082}:8080'
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+      ADMINER_DESIGN: '${ADMINER_DESIGN:-nette}'
 networks:
   test_network:
 volumes:

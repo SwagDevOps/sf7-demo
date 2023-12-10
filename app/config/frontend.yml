@@ -1,6 +1,7 @@
 parameters:
   frontend.navbar.items:
     Events: home
+    'New Event': events.create
   frontend.footer.features:
     'Cool stuff': '#'
     'Random feature': '#'

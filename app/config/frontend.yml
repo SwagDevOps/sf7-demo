@@ -1,6 +1,6 @@
 parameters:
   frontend.navbar.items:
-    Events: home
+    Events: events.index
     'New Event': events.create
   frontend.footer.features:
     'Cool stuff': '#'

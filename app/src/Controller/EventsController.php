@@ -20,6 +20,7 @@ class EventsController extends AbstractController
      * Index page, with events sorted by ``begin_date`` (excludes events with a ``end_date`` greater than now).
      */
     #[Route('/', name: 'home', methods: ['HEAD', 'GET'])]
+    #[Route('/', name: 'events.index', methods: ['HEAD', 'GET'])]
     public function index(Request $request, EventRepository $repository): Response
     {
         $events = $repository->paginate(call_user_func(function () use ($request): int {

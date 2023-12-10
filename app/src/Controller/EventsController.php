@@ -12,7 +12,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Provide a simple planner app.
+ * Provides events operations.
  */
 class EventsController extends AbstractController
 {
@@ -56,11 +56,11 @@ class EventsController extends AbstractController
     /**
      * Processes update payload.
      */
-    #[Route('/events/{id}/update', name: 'events.update', methods: ['POST'])]
+    #[Route('/events/{id}/update', name: 'events.update', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function update(int $id, Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
         if (!($event = $em->getRepository(Event::class)->find($id))) {
-            throw $this->createNotFoundException("No event found for id ${id}");
+            throw $this->createNotFoundException("No event found for id {$id}");
         }
 
         // @todo add notifications
@@ -85,6 +85,22 @@ class EventsController extends AbstractController
         return $this->redirectToRoute('events.edit', [
             'id' => $event->getId(),
         ]);
+    }
+
+    /**
+     * Removes event for given id.
+     */
+    #[Route('/events/{id}/destroy', name: 'events.destroy', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function destroy(int $id, EntityManagerInterface $em): Response
+    {
+        if (!($event = $em->getRepository(Event::class)->find($id))) {
+            throw $this->createNotFoundException("No event found for id {$id}");
+        }
+
+        $em->remove($event);
+        $em->flush();
+
+        return $this->redirectToRoute('events.index');
     }
 
     /**

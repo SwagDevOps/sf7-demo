@@ -2,7 +2,14 @@
 {% trans_default_domain 'app' %}
 
 {% block content %}
-    <form action="{{ event.id ? path('events.update', {id: event.id}) : path('events.insert') }}" method="post">
+    {% if event.getId() %}
+        <form action="{{ path('events.destroy', {id: event.id}) }}"
+              method="post"
+              id="delete_form"></form>
+    {% endif %}
+    <form action="{{ event.id ? path('events.update', {id: event.id}) : path('events.insert') }}"
+          method="post"
+          id="edit_form">
         <div class="form-group">
             <label for="title">
                 {{ 'Event Title'|trans }}
@@ -51,11 +58,21 @@
                        value="{{ event.endDate|date('Y-m-d H:i') }}"/>
             </div>
         </div>
+    </form>
 
-        <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary">
+    <div class="form-group mt-3 row">
+        <div class="col">
+            <button type="submit" class="btn btn-primary" form="edit_form">
                 {{ 'Submit'|trans }}
             </button>
         </div>
-    </form>
+
+        {% if event.getId() %}
+            <div class="col">
+                <button type="submit" class="btn btn-danger float-end" form="delete_form">
+                    {{ 'Destroy'|trans }}
+                </button>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

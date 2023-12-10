@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use Carbon\Carbon;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -14,11 +17,39 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Event[]    findAll()
  * @method Event[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EventRepository extends ServiceEntityRepository
+class EventRepository extends AbstractRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * Paginates events (used for an index page)
+     *
+     * @see \App\Controller\EventsController::index()
+     */
+    public function paginate(int $page = 1, int $pageSize = 10): PaginationInterface
     {
-        parent::__construct($registry, Event::class);
+        $query = $this->getQueryBuilderForNotEnded();
+
+        return $this->paginateQueryBuilder($query, $page, $pageSize);
+    }
+
+    /**
+     * Creates basic query-builder with default sort order (by begin date).
+     */
+    protected function getQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('event')
+            ->orderBy('event.begin_date', 'ASC');
+    }
+
+    /**
+     * Creates a query-builder for events finishing in the future.
+     *
+     * @param null|DateTime $currentDate
+     */
+    protected function getQueryBuilderForNotEnded(DateTime $currentDate = null): QueryBuilder
+    {
+        return $this->getQueryBuilder()
+            ->where('event.end_date > :currentDate')
+            ->setParameter('currentDate', $currentDate ?: Carbon::now());
     }
 
 //    /**

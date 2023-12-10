@@ -2,7 +2,7 @@
 {% trans_default_domain 'app' %}
 
 {% block content %}
-    <form action="{{ path('events.update', {id: event.id}) }}" method="post">
+    <form action="{{ event.id ? path('events.update', {id: event.id}) : path('events.insert') }}" method="post">
         <div class="form-group">
             <label for="title">
                 {{ 'Event Title'|trans }}

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -30,7 +31,21 @@ class EventsController extends AbstractController
         ]);
     }
 
-    #[Route('/events/{id}', name: 'events.edit', methods: ['HEAD', 'GET'])]
+    /**
+     * Displays a creation form.
+     */
+    #[Route('/events/new', name: 'events.create', methods: ['HEAD', 'GET'])]
+    public function create(): Response
+    {
+        return $this->render('create.html', [
+            'event' => new Event(),
+        ]);
+    }
+
+    /**
+     * Displays en edit form.
+     */
+    #[Route('/events/{id}', name: 'events.edit', requirements: ['id' => '\d+'], methods: ['HEAD', 'GET'])]
     public function edit(int $id, EventRepository $repository): Response
     {
         return $this->render('edit.html', [
@@ -38,6 +53,9 @@ class EventsController extends AbstractController
         ]);
     }
 
+    /**
+     * Processes update payload.
+     */
     #[Route('/events/{id}/update', name: 'events.update', methods: ['POST'])]
     public function update(int $id, Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
@@ -45,18 +63,48 @@ class EventsController extends AbstractController
             throw $this->createNotFoundException("No event found for id ${id}");
         }
 
-        foreach ($request->request->all() as $key => $value) {
-            call_user_func_array([$event, sprintf("set%s", ucfirst($key))], [$value]);
-        }
-
         // @todo add notifications
-        $errors = $validator->validate($event);
-        if (count($errors) <= 0) {
-            $em->flush();
-        }
+        $this->store($event, $request->request->all(), $em, $validator);
 
         return $this->redirectToRoute('events.edit', [
             'id' => $id,
         ]);
+    }
+
+    /**
+     * Processes creation payload.
+     */
+    #[Route('/events/insert', name: 'events.insert', methods: ['POST'])]
+    public function insert(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
+    {
+        $event = new Event();
+
+        // @todo add notifications
+        $this->store($event, $request->request->all(), $em, $validator);
+
+        return $this->redirectToRoute('events.edit', [
+            'id' => $event->getId(),
+        ]);
+    }
+
+    /**
+     * Stores given event (create or update with given payload), returns validation errors.
+     */
+    protected function store(Event $event, array $payload, EntityManagerInterface $em, ValidatorInterface $validator): ConstraintViolationListInterface
+    {
+        foreach ($payload as $key => $value) {
+            call_user_func_array([$event, sprintf("set%s", ucfirst($key))], [$value]);
+        }
+
+        $errors = $validator->validate($event);
+        if (count($errors) <= 0) {
+            if (!$event->getId()) {
+                $em->persist($event);
+            }
+
+            $em->flush();
+        }
+
+        return $errors;
     }
 }

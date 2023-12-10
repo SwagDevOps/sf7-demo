@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'app' %}
+
+{% block content %}
+    <form action="{{ path('events.update', {id: event.id}) }}" method="post">
+        <div class="form-group">
+            <label for="title">
+                {{ 'Event Title'|trans }}
+            </label>
+            <input type="text"
+                   class="form-control"
+                   id="event_title"
+                   name="title"
+                   required
+                   placeholder="{{ 'Event Title'|trans }}"
+                   value="{{ event.title }}"/>
+        </div>
+
+        <div class="form-group">
+            <label for="description">
+                {{ 'Event Description'|trans }}
+            </label>
+            <textarea class="form-control"
+                      id="event_description"
+                      name="description"
+                      rows="3">{{ event.description }}</textarea>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col">
+                <label for="event_beginDate">
+                    {{ 'Begin Date'|trans }}
+                </label>
+                <input type="datetime-local"
+                       class="form-control"
+                       id="event_beginDate"
+                       name="beginDate"
+                       required
+                       value="{{ event.beginDate|date('Y-m-d H:i') }}"/>
+
+            </div>
+            <div class="col">
+                <label for="event_endDate">
+                    {{ 'End Date'|trans }}
+                </label>
+                <input type="datetime-local"
+                       class="form-control"
+                       id="event_endDate"
+                       name="endDate"
+                       required
+                       value="{{ event.endDate|date('Y-m-d H:i') }}"/>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">
+                {{ 'Submit'|trans }}
+            </button>
+        </div>
+    </form>
+{% endblock %}

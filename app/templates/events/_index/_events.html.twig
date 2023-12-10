@@ -24,7 +24,9 @@
                 {{ loop.index }}
             </th>
             <td>
-                {{ event.title }}
+                <a href="{{ path('events.edit', {id: event.id}) }}">
+                    {{ event.title }}
+                </a>
             </td>
             </th>
             <td>

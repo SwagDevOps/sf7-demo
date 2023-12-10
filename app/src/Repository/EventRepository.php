@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Carbon\Carbon;
-use DateTime;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -43,9 +43,9 @@ class EventRepository extends AbstractRepository
     /**
      * Creates a query-builder for events finishing in the future.
      *
-     * @param null|DateTime $currentDate
+     * @param null|DateTimeInterface $currentDate
      */
-    protected function getQueryBuilderForNotEnded(DateTime $currentDate = null): QueryBuilder
+    protected function getQueryBuilderForNotEnded(DateTimeInterface $currentDate = null): QueryBuilder
     {
         return $this->getQueryBuilder()
             ->where('event.end_date > :currentDate')

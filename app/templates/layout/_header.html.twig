@@ -1,0 +1,19 @@
+{% trans_default_domain 'app' %}
+<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h1 class="my-0 mr-md-auto font-weight-normal h5 w-50">
+        <a href="{{ path('home') }}" class="text-dark text-decoration-none">
+            {% block content_title %}My Application{% endblock %}
+        </a>
+    </h1>
+
+    <nav class="my-2 my-md-0 mr-md-3 w-50">
+        <div class="w-100 d-flex justify-content-end">
+            {% for label, path in navbar_items %}
+                <a class="p-2 {{ (loop.last) ? '' : 'me3' }} {{ (path == 'events.create') ? 'btn btn-outline-primary' : 'text-dark text-decoration-none' }}"
+                   href="{{ path(path) }}">
+                    {{ label|trans }}
+                </a>
+            {% endfor %}
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+exec docker-compose run -w /var/www/app php-apache composer "$@"

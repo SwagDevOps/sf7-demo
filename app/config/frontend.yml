@@ -1,0 +1,21 @@
+parameters:
+  frontend.navbar.items:
+    Events: events.index
+    'New Event': events.create
+  frontend.footer.features:
+    'Cool stuff': '#'
+    'Random feature': '#'
+    'Team feature': '#'
+    'Stuff for developers': '#'
+    'Another one': '#'
+    'Last one': '#'
+  frontend.footer.resources:
+    'Resource': '#'
+    'Resource name': '#'
+    'Another resource': '#'
+    'Final resource': '#'
+  frontend.footer.about:
+    'Team': '#'
+    'Locations': '#'
+    'Privacy': '#'
+    'Terms': '#'

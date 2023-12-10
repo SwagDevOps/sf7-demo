@@ -1,0 +1,47 @@
+{% trans_default_domain 'app' %}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">
+            {{ 'Event Title'|trans }}
+        </th>
+        <th scope="col">
+            {{ 'Event Description'|trans }}
+        </th>
+        <th scope="col">
+            {{ 'Begin Date'|trans }}
+        </th>
+        <th scope="col">
+            {{ 'End Date'|trans }}
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+        <tr>
+            <th scope="row">
+                {{ loop.index }}
+            </th>
+            <td>
+                <a href="{{ path('events.edit', {id: event.id}) }}">
+                    {{ event.title }}
+                </a>
+            </td>
+            </th>
+            <td>
+                {{ event.description }}
+            </td>
+            <td>
+                {{ event.beginDate|format_datetime('long', 'short') }}
+            </td>
+            <td>
+                {{ event.endDate|format_datetime('long', 'short') }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{{ events.setCustomParameters({align: 'center'}) }}
+{{ knp_pagination_render(events) }}
